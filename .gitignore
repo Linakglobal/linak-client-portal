@@ -12,6 +12,7 @@
 
 # testing
 /coverage
+*.lcov
 
 # next.js
 /.next/
@@ -19,10 +20,12 @@
 
 # production
 /build
+/dist
 
 # misc
 .DS_Store
 *.pem
+Thumbs.db
 
 # debug
 npm-debug.log*
@@ -44,13 +47,15 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# IDE
-.vscode/settings.json
-.idea/
+# IDEs and editors
+/.vscode/settings.json
+/.vscode/launch.json
+/.idea
 *.swp
 *.swo
+*~
 
-# OS
+# OS generated files
 .DS_Store
 .DS_Store?
 ._*
@@ -59,21 +64,26 @@ next-env.d.ts
 ehthumbs.db
 Thumbs.db
 
-# Logs
-logs
-*.log
-
 # Runtime data
 pids
 *.pid
 *.seed
 *.pid.lock
 
+# Logs
+logs
+*.log
+
 # Optional npm cache directory
 .npm
 
 # Optional eslint cache
 .eslintcache
+
+# Storybook build outputs
+.out
+.storybook-out
+storybook-static
 
 # Temporary folders
 tmp/
