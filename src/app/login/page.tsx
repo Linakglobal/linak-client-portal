@@ -7,16 +7,17 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { supabase } from "@/lib/supabase";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState<{ email?: string; dateOfBirth?: string }>({});
+  const [errors, setErrors] = useState<{ email?: string; dateOfBirth?: string; general?: string }>({});
   const router = useRouter();
 
   const validateForm = () => {
-    const newErrors: { email?: string; dateOfBirth?: string } = {};
+    const newErrors: { email?: string; dateOfBirth?: string; general?: string } = {};
     
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -50,14 +51,91 @@ export default function LoginPage() {
     }
 
     setIsLoading(true);
+    setErrors({}); // Clear any previous errors
 
-    // Simulate authentication
-    setTimeout(() => {
+    try {
+      // Check if Supabase is properly configured
+      if (!process.env.NEXT_PUBLIC_SUPABASE_URL || 
+          process.env.NEXT_PUBLIC_SUPABASE_URL === 'https://demo-project.supabase.co') {
+        // Fallback to demo mode if Supabase is not configured
+        console.warn('Supabase not configured, using demo mode');
+        
+        // Demo validation - accept any email with any DOB
+        setTimeout(() => {
+          localStorage.setItem("isAuthenticated", "true");
+          localStorage.setItem("userEmail", email);
+          router.push("/dashboard");
+          setIsLoading(false);
+        }, 1500);
+        return;
+      }
+
+      // Step 1: Check if client exists in the 'clients' table
+      const { data: clients, error: fetchError } = await supabase
+        .from('clients')
+        .select('*')
+        .eq('email', email)
+        .single();
+
+      if (fetchError || !clients) {
+        setErrors({ 
+          general: "Invalid credentials or not a verified LINAK client" 
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      // Step 2: Verify the date of birth matches
+      const clientDob = new Date(clients.dob).toDateString();
+      const inputDob = new Date(dateOfBirth).toDateString();
+      
+      if (clientDob !== inputDob) {
+        setErrors({ 
+          general: "Invalid credentials or not a verified LINAK client" 
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      // Step 3: Authenticate with Supabase Auth using magic link
+      const { error: authError } = await supabase.auth.signInWithOtp({
+        email: email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/dashboard`,
+        }
+      });
+
+      if (authError) {
+        console.error('Auth error:', authError);
+        setErrors({ 
+          general: "Authentication failed. Please try again." 
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      // Success - show magic link sent message
+      setErrors({ 
+        general: "" 
+      });
+      
+      // Store temporary auth state and redirect
       localStorage.setItem("isAuthenticated", "true");
       localStorage.setItem("userEmail", email);
+      localStorage.setItem("clientData", JSON.stringify(clients));
+      
+      // Show success message or redirect
+      alert("Authentication successful! Check your email for the magic link, or continue to dashboard.");
       router.push("/dashboard");
+
+    } catch (error) {
+      console.error('Login error:', error);
+      setErrors({ 
+        general: "An unexpected error occurred. Please try again." 
+      });
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -99,7 +177,9 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);
-                    if (errors.email) setErrors(prev => ({ ...prev, email: undefined }));
+                    if (errors.email || errors.general) {
+                      setErrors(prev => ({ ...prev, email: undefined, general: undefined }));
+                    }
                   }}
                   className={`h-12 px-4 border-2 transition-all duration-200 ${
                     errors.email 
@@ -128,7 +208,9 @@ export default function LoginPage() {
                   value={dateOfBirth}
                   onChange={(e) => {
                     setDateOfBirth(e.target.value);
-                    if (errors.dateOfBirth) setErrors(prev => ({ ...prev, dateOfBirth: undefined }));
+                    if (errors.dateOfBirth || errors.general) {
+                      setErrors(prev => ({ ...prev, dateOfBirth: undefined, general: undefined }));
+                    }
                   }}
                   className={`h-12 px-4 border-2 transition-all duration-200 ${
                     errors.dateOfBirth 
@@ -145,6 +227,18 @@ export default function LoginPage() {
                   </p>
                 )}
               </div>
+
+              {/* General Error Message */}
+              {errors.general && (
+                <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                  <p className="text-red-700 text-sm flex items-center">
+                    <svg className="w-5 h-5 mr-2 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                    </svg>
+                    {errors.general}
+                  </p>
+                </div>
+              )}
 
               {/* Premium Submit Button */}
               <Button 
