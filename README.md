@@ -41,7 +41,51 @@ For development and testing, this project includes demo data fixtures and a seed
 ⚠️ **Manual Execution**: Script generates SQL but doesn't execute automatically  
 ⚠️ **Service Role Not Required**: Uses standard SQL INSERT statements
 
-## 📜 License
+## � Deploy on Vercel
+
+### Prerequisites
+- Supabase project with Auth and Database configured
+- GitHub repository connected to Vercel
+
+### 1. Environment Variables
+Add these required environment variables in Vercel Dashboard > Settings > Environment Variables:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+NEXT_PUBLIC_SITE_URL=https://your-domain.vercel.app
+```
+
+### 2. Supabase Auth Configuration
+In your Supabase Dashboard > Authentication > URL Configuration:
+
+1. **Site URL**: `https://your-domain.vercel.app`
+2. **Redirect URLs**: Add these URLs:
+   - `https://your-domain.vercel.app/auth/callback` (production)
+   - `http://localhost:3002/auth/callback` (development)
+
+### 3. Deploy Steps
+1. Connect your GitHub repository to Vercel
+2. Set the environment variables above
+3. Deploy the project
+4. Verify the deployment
+
+### 4. Post-Deploy Verification
+After deployment, verify these critical functions:
+
+✅ **Root Redirect**: Visit `/` → Should redirect to `/login`  
+✅ **Magic Link Auth**: Test sign-in with magic link email  
+✅ **Document Upload**: Upload files to `client-documents/<uid>/...`  
+✅ **Route Protection**: Protected routes require authentication  
+✅ **Database Integration**: User profiles and documents sync properly
+
+### 5. Troubleshooting
+- Check Vercel Function logs for auth issues
+- Verify Supabase RLS policies allow proper access
+- Ensure storage bucket `client-documents` exists with proper permissions
+- Test magic link delivery (check spam folder)
+
+## �📜 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.ublic/preview.png)
 
