@@ -8,8 +8,9 @@ interface Document {
   uploadedAt: string;
 }
 
-export async function getClientDocuments(clientId: string): Promise<Document[]> {
-  // Mock documents for demo
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function getClientDocuments(_clientId: string): Promise<Document[]> {
+  // Mock documents for demo - clientId parameter available for future use
   const mockDocuments: Document[] = [
     {
       id: "1",

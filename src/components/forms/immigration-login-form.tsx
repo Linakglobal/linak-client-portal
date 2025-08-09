@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function ImmigrationLoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -40,10 +41,12 @@ export default function ImmigrationLoginForm() {
     <Card className="streamit-card border border-slate-700/50">
       <CardHeader className="space-y-1 text-center">
         <div className="flex items-center justify-center mb-4">
-          <img
+          <Image
             src="/linak-logo-wings.svg"
             alt="LINAK"
-            className="w-12 h-12 filter brightness-0 invert"
+            width={48}
+            height={48}
+            className="filter brightness-0 invert"
           />
         </div>
         <CardTitle className="text-2xl font-bold text-white">
