@@ -1,17 +1,7 @@
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-export default async function HomePage() {
-  const supabase = createServerComponentClient({ cookies });
-  
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  if (session) {
-    redirect('/dashboard');
-  } else {
-    redirect('/login');
-  }
+export default function HomePage() {
+  // For now, always redirect to login since we don't have a proper session check
+  // This will be handled by middleware for authenticated routes
+  redirect('/login');
 }
