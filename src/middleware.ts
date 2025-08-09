@@ -1,9 +1,30 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export async function middleware(_request: NextRequest) {
+export async function middleware(request: NextRequest) {
   try {
-    // For now, just allow everything through to test the homepage
+    const { pathname } = request.nextUrl;
+    
+    // Allow public routes without authentication
+    const publicRoutes = ['/login', '/auth', '/api/auth'];
+    const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
+    
+    if (isPublicRoute) {
+      return NextResponse.next();
+    }
+    
+    // Check for session (simplified for demo - in production use proper session validation)
+    const hasSession = request.cookies.get('demo-session') || 
+                      request.cookies.get('sb-access-token') ||
+                      request.cookies.get('supabase-auth-token');
+    
+    // Redirect to login for protected routes without session
+    if (!hasSession && !isPublicRoute && pathname !== '/') {
+      const loginUrl = new URL('/login', request.url);
+      loginUrl.searchParams.set('redirectTo', pathname);
+      return NextResponse.redirect(loginUrl, 307);
+    }
+    
     return NextResponse.next();
   } catch (error) {
     console.error("Middleware error:", error);

@@ -20,6 +20,47 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Dev Fixtures
+
+The project includes development fixtures to help with testing and development:
+
+### Available Fixtures
+
+- **`fixtures/users.json`** - Demo users with different roles:
+  - `demo@linak.com` - Standard client user
+  - `admin@linak.com` - Administrator user  
+  - `client@linak.com` - Client with sample application data
+
+- **`fixtures/documents.json`** - Sample document metadata with various statuses:
+  - Approved documents (passport, bank statements, certificates)
+  - Pending documents (university diploma)
+  - Documents requiring action (employment letter)
+  - Rejected documents (expired medical certificate)
+
+### Using Dev Fixtures
+
+1. **Generate SQL for Development Database:**
+   ```bash
+   node scripts/seed-dev.mjs
+   ```
+
+2. **Save SQL to File:**
+   ```bash
+   node scripts/seed-dev.mjs > dev-seed.sql
+   ```
+
+3. **Manual Database Seeding:**
+   - Review the generated SQL statements
+   - Copy relevant statements to your database console
+   - Ensure your database schema matches the expected columns
+
+### Important Notes
+
+- ⚠️ **Development Use Only** - These fixtures are for development and testing purposes
+- The seed script generates SQL INSERT statements but does not execute them automatically
+- Manual review and execution is required for safety
+- Ensure your database schema matches the fixture structure before executing
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

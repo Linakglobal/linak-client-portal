@@ -3,7 +3,7 @@ import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 export async function POST(request: NextRequest) {
   try {
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Send email notification to client
-    if (process.env.RESEND_API_KEY) {
+    if (resend && process.env.RESEND_API_KEY) {
       try {
         const emailContent =
           status === "verified"
@@ -219,7 +219,7 @@ export async function POST(request: NextRequest) {
               `,
               };
 
-        await resend.emails.send({
+        await resend!.emails.send({
           from: "LINAK Reports <noreply@linakmigration.com>",
           to: [report.client_email],
           ...emailContent,

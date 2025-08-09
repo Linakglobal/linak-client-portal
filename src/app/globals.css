@@ -5,6 +5,12 @@
 :root {
   --radius: 0.75rem;
 
+  /* Ultra-premium typography system variables */
+  --font-inter: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-playfair: 'Playfair Display', Georgia, Times, serif;
+  --font-jetbrains: 'JetBrains Mono', Consolas, Monaco, monospace;
+  --font-poppins: 'Poppins', system-ui, -apple-system, sans-serif;
+
   /* Luxurious Futuristic Dark Theme - HSL format for shadcn */
   --background: 261 40% 5%; /* #0d0b16 - Velvet Black */
   --foreground: 0 0% 100%; /* #ffffff - Pure White */
