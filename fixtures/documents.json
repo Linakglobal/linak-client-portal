@@ -1,0 +1,54 @@
+[
+  {
+    "id": "doc-1",
+    "title": "Immigration Application Form",
+    "description": "Initial immigration application documents",
+    "file_path": "client-documents/demo-user-1/immigration-application.pdf",
+    "file_type": "application/pdf",
+    "file_size": 1024000,
+    "status": "processed",
+    "client_id": "demo-user-1",
+    "uploaded_at": "2025-01-01T10:00:00Z",
+    "processed_at": "2025-01-01T11:00:00Z",
+    "tags": ["application", "immigration", "forms"]
+  },
+  {
+    "id": "doc-2", 
+    "title": "Passport Copy",
+    "description": "Client passport verification document",
+    "file_path": "client-documents/demo-user-1/passport-copy.pdf",
+    "file_type": "application/pdf",
+    "file_size": 512000,
+    "status": "approved",
+    "client_id": "demo-user-1",
+    "uploaded_at": "2025-01-01T12:00:00Z",
+    "processed_at": "2025-01-01T13:00:00Z",
+    "tags": ["identity", "passport", "verification"]
+  },
+  {
+    "id": "doc-3",
+    "title": "Medical Certificate",
+    "description": "Health examination results",
+    "file_path": "client-documents/demo-user-3/medical-certificate.pdf", 
+    "file_type": "application/pdf",
+    "file_size": 768000,
+    "status": "pending_review",
+    "client_id": "demo-user-3",
+    "uploaded_at": "2025-01-02T09:00:00Z",
+    "processed_at": null,
+    "tags": ["medical", "health", "certificate"]
+  },
+  {
+    "id": "doc-4",
+    "title": "Financial Statement",
+    "description": "Bank statements and financial proof",
+    "file_path": "client-documents/demo-user-3/financial-statement.pdf",
+    "file_type": "application/pdf", 
+    "file_size": 2048000,
+    "status": "processing",
+    "client_id": "demo-user-3",
+    "uploaded_at": "2025-01-02T14:30:00Z",
+    "processed_at": null,
+    "tags": ["financial", "bank", "statements"]
+  }
+]
