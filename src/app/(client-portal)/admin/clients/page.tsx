@@ -35,7 +35,11 @@ import {
   Users,
   AlertTriangle,
   Loader2,
+  Upload,
+  Download,
+  FileSpreadsheet,
 } from "lucide-react";
+import Papa from 'papaparse';
 import {
   listClients,
   createClient,
@@ -61,6 +65,15 @@ export default function AdminClientsPage({ isAdmin = true }: ClientsPageProps) {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  
+  // CSV Import states
+  const [showImportDialog, setShowImportDialog] = useState(false);
+  const [csvFile, setCsvFile] = useState<File | null>(null);
+  const [importResults, setImportResults] = useState<{
+    success: number;
+    errors: string[];
+  } | null>(null);
+  const [isImporting, setIsImporting] = useState(false);
 
   // Form data states
   const [formData, setFormData] = useState({
@@ -253,6 +266,99 @@ export default function AdminClientsPage({ isAdmin = true }: ClientsPageProps) {
   const openCreateDialog = () => {
     resetForm();
     setShowCreateDialog(true);
+  };
+
+  // CSV Import handlers
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && file.type === 'text/csv') {
+      setCsvFile(file);
+      setImportResults(null);
+    } else {
+      alert('Please select a valid CSV file');
+    }
+  };
+
+  const handleCsvImport = async () => {
+    if (!csvFile) return;
+
+    setIsImporting(true);
+    setImportResults(null);
+
+    Papa.parse(csvFile, {
+      header: true,
+      skipEmptyLines: true,
+      complete: async (results) => {
+        const errors: string[] = [];
+        let successCount = 0;
+
+        // Process each row
+        for (let i = 0; i < results.data.length; i++) {
+          const row = results.data[i] as any;
+          
+          try {
+            // Validate required fields
+            if (!row.name || !row.email || !row.dob) {
+              errors.push(`Row ${i + 1}: Missing required fields (name, email, dob)`);
+              continue;
+            }
+
+            // Create client data
+            const clientData = {
+              name: row.name,
+              email: row.email,
+              dob: row.dob,
+              company: row.company || '',
+              phone: row.phone || '',
+              address: row.address || '',
+              account_status: (row.account_status as 'active' | 'inactive' | 'suspended') || 'active',
+              payment_amount: row.payment_amount ? parseFloat(row.payment_amount) : undefined,
+              currency: row.currency || 'USD',
+              payment_status: (row.payment_status as 'completed' | 'pending' | 'overdue') || 'pending',
+              contract_type: row.contract_type || '',
+              start_date: row.start_date || '',
+              end_date: row.end_date || '',
+            };
+
+            // Attempt to create client
+            const result = await createClient(clientData);
+            if (result.success) {
+              successCount++;
+            } else {
+              errors.push(`Row ${i + 1} (${row.name}): ${result.error || 'Failed to create client'}`);
+            }
+          } catch (error) {
+            errors.push(`Row ${i + 1} (${row.name || 'Unknown'}): ${error instanceof Error ? error.message : 'Unknown error'}`);
+          }
+        }
+
+        setImportResults({ success: successCount, errors });
+        setIsImporting(false);
+        
+        // Refresh the clients list
+        if (successCount > 0) {
+          loadClients(currentPage, searchQuery);
+        }
+      },
+      error: (error) => {
+        setImportResults({ success: 0, errors: [`CSV parsing error: ${error.message}`] });
+        setIsImporting(false);
+      }
+    });
+  };
+
+  const downloadSampleCsv = () => {
+    const csvContent = `name,email,dob,company,phone,address,account_status,payment_amount,currency,payment_status,contract_type,start_date,end_date
+John Doe,john@example.com,1985-01-15,Example Corp,+1234567890,123 Main St,active,5000.00,USD,completed,Premium,2024-01-01,2024-12-31
+Jane Smith,jane@example.com,1990-05-20,Tech Solutions,+1987654321,456 Oak Ave,active,3000.00,USD,pending,Standard,2024-02-01,2024-11-30`;
+    
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'clients-sample.csv';
+    link.click();
+    window.URL.revokeObjectURL(url);
   };
 
   // Access denied state
@@ -558,13 +664,23 @@ export default function AdminClientsPage({ isAdmin = true }: ClientsPageProps) {
                   className="pl-10 bg-white/10 border-white/20 text-white placeholder:text-white/40"
                 />
               </div>
-              <Button
-                onClick={openCreateDialog}
-                className="shrink-0 bg-blue-600 hover:bg-blue-700"
-              >
-                <Plus className="w-4 h-4 mr-2" />
-                New Client
-              </Button>
+              <div className="flex gap-3">
+                <Button
+                  onClick={() => setShowImportDialog(true)}
+                  variant="outline"
+                  className="border-white/20 text-white/80 hover:bg-white/10"
+                >
+                  <Upload className="w-4 h-4 mr-2" />
+                  Import CSV
+                </Button>
+                <Button
+                  onClick={openCreateDialog}
+                  className="shrink-0 bg-blue-600 hover:bg-blue-700"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  New Client
+                </Button>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -833,6 +949,129 @@ export default function AdminClientsPage({ isAdmin = true }: ClientsPageProps) {
                   "Delete Client"
                 )}
               </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* CSV Import Dialog */}
+        <Dialog open={showImportDialog} onOpenChange={setShowImportDialog}>
+          <DialogContent className="bg-slate-900 border-slate-700 max-w-2xl">
+            <DialogHeader>
+              <DialogTitle className="text-white flex items-center gap-2">
+                <FileSpreadsheet className="w-5 h-5 text-green-400" />
+                Import Clients from CSV
+              </DialogTitle>
+              <DialogDescription className="text-white/70">
+                Upload a CSV file to bulk import client data. Download the sample template to see the required format.
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="space-y-6">
+              {/* File Upload Section */}
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-white font-medium">Upload CSV File</h3>
+                  <Button
+                    onClick={downloadSampleCsv}
+                    variant="outline"
+                    size="sm"
+                    className="border-white/20 text-white/80 hover:bg-white/10"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Download Sample
+                  </Button>
+                </div>
+                
+                <div className="border-2 border-dashed border-slate-600 rounded-lg p-6 text-center">
+                  <FileSpreadsheet className="w-12 h-12 text-slate-400 mx-auto mb-4" />
+                  <div>
+                    <label htmlFor="csvFile" className="cursor-pointer">
+                      <span className="text-white font-medium hover:text-blue-400 transition-colors">
+                        Click to select CSV file
+                      </span>
+                      <input
+                        id="csvFile"
+                        type="file"
+                        accept=".csv"
+                        onChange={handleFileSelect}
+                        className="hidden"
+                      />
+                    </label>
+                    <p className="text-slate-400 text-sm mt-2">
+                      Only CSV files are supported
+                    </p>
+                  </div>
+                  {csvFile && (
+                    <div className="mt-4 p-3 bg-slate-800 rounded-lg">
+                      <p className="text-white text-sm">
+                        Selected: {csvFile.name}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Import Results */}
+              {importResults && (
+                <div className="space-y-3">
+                  <h3 className="text-white font-medium">Import Results</h3>
+                  
+                  {importResults.success > 0 && (
+                    <div className="p-3 bg-green-500/20 border border-green-500/30 rounded-lg">
+                      <p className="text-green-400 text-sm">
+                        ✅ Successfully imported {importResults.success} client{importResults.success !== 1 ? 's' : ''}
+                      </p>
+                    </div>
+                  )}
+                  
+                  {importResults.errors.length > 0 && (
+                    <div className="p-3 bg-red-500/20 border border-red-500/30 rounded-lg">
+                      <p className="text-red-400 text-sm font-medium mb-2">
+                        ❌ {importResults.errors.length} error{importResults.errors.length !== 1 ? 's' : ''} occurred:
+                      </p>
+                      <div className="max-h-32 overflow-y-auto space-y-1">
+                        {importResults.errors.map((error, index) => (
+                          <p key={index} className="text-red-400 text-xs">
+                            {error}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              <div className="flex justify-end gap-3 pt-4">
+                <Button 
+                  variant="outline" 
+                  onClick={() => {
+                    setShowImportDialog(false);
+                    setCsvFile(null);
+                    setImportResults(null);
+                  }}
+                  disabled={isImporting}
+                >
+                  {importResults ? 'Close' : 'Cancel'}
+                </Button>
+                <Button 
+                  onClick={handleCsvImport}
+                  disabled={!csvFile || isImporting}
+                  className="bg-green-600 hover:bg-green-700"
+                >
+                  {isImporting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Importing...
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="w-4 h-4 mr-2" />
+                      Import Clients
+                    </>
+                  )}
+                </Button>
+              </div>
             </div>
           </DialogContent>
         </Dialog>
