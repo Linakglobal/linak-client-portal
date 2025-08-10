@@ -38,6 +38,7 @@ import {
   Upload,
   Download,
   FileSpreadsheet,
+  FileText,
 } from "lucide-react";
 import Papa from 'papaparse';
 import {
@@ -48,11 +49,7 @@ import {
 } from "./actions";
 import type { Client } from "@/types/client";
 
-interface ClientsPageProps {
-  isAdmin?: boolean;
-}
-
-export default function AdminClientsPage({ isAdmin = true }: ClientsPageProps) {
+export default function AdminClientsPage() {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [clients, setClients] = useState<Client[]>([]);
@@ -361,7 +358,8 @@ Jane Smith,jane@example.com,1990-05-20,Tech Solutions,+1987654321,456 Oak Ave,ac
     window.URL.revokeObjectURL(url);
   };
 
-  // Access denied state
+  // Access denied state - simplified demo check
+  const isAdmin = true; // In a real app, this would check actual user permissions
   if (!isAdmin) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
@@ -812,6 +810,15 @@ Jane Smith,jane@example.com,1990-05-20,Tech Solutions,+1987654321,456 Oak Ave,ac
                           </TableCell>
                           <TableCell className="text-right">
                             <div className="flex justify-end gap-2">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => window.open(`/documents?client=${client.id}`, '_blank')}
+                                className="border-blue-500/30 text-blue-400 hover:bg-blue-500/10"
+                                title="View Documents"
+                              >
+                                <FileText className="w-4 h-4" />
+                              </Button>
                               <Button
                                 size="sm"
                                 variant="outline"
