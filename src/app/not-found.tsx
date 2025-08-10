@@ -122,6 +122,13 @@ export default function NotFound() {
               variant="outline"
               size="lg"
               onClick={() => window.history.back()}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  window.history.back();
+                }
+              }}
+              aria-label="Go back to previous page"
               className="bg-white/10 border-white/20 text-white hover:bg-white/20 font-semibold px-8 py-3 rounded-xl shadow-lg backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:scale-105"
             >
               <ArrowLeft className="w-5 h-5 mr-2" />

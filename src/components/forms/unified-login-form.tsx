@@ -112,24 +112,25 @@ export function LoginForm({ variant = "default", showDemo = true }: LoginFormPro
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden flex items-center justify-center p-4">
-      {/* Background Effects */}
-      <div className="absolute inset-0 bg-gradient-to-r from-royal/10 to-accent/10 animate-pulse-slow" />
-      <div className="absolute inset-0">
+      {/* Background Effects - Hidden from screen readers */}
+      <div className="absolute inset-0 bg-gradient-to-r from-royal/10 to-accent/10 animate-pulse-slow" aria-hidden="true" />
+      <div className="absolute inset-0" aria-hidden="true">
         <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-royal/20 to-accent/20 rounded-full mix-blend-multiply filter blur-xl animate-float"></div>
         <div className="absolute top-40 right-10 w-72 h-72 bg-gradient-to-r from-accent/20 to-royal/20 rounded-full mix-blend-multiply filter blur-xl animate-float-delayed"></div>
         <div className="absolute -top-24 left-1/2 transform -translate-x-1/2 w-96 h-96 bg-gradient-to-r from-royal/10 to-accent/10 rounded-full mix-blend-multiply filter blur-3xl animate-pulse-slow"></div>
       </div>
 
-      <Card className="w-full max-w-md mx-auto bg-white/95 backdrop-blur-lg border-0 shadow-2xl relative overflow-hidden">
+      <main className="w-full max-w-md mx-auto">
+        <Card className="bg-white/95 backdrop-blur-lg border-0 shadow-2xl relative overflow-hidden" aria-labelledby="login-form-title">;
         {/* Card Header Gradient */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-royal via-accent to-royal"></div>
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-royal via-accent to-royal" aria-hidden="true"></div>
         
         <CardHeader className="space-y-4 pb-6">
           {/* Logo */}
           <div className={`mx-auto ${logo.containerSize} bg-gradient-to-br from-royal/20 to-accent/20 rounded-2xl shadow-lg flex items-center justify-center p-3`}>
             <Image
               src="/linak-logo.svg"
-              alt="LINAK"
+              alt="LINAK Global Immigration Services Logo"
               width={logo.width}
               height={logo.height}
               className={`${logo.containerSize} object-contain`}
@@ -140,7 +141,7 @@ export function LoginForm({ variant = "default", showDemo = true }: LoginFormPro
           </div>
           
           <div className="text-center">
-            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-royal to-accent bg-clip-text text-transparent">
+            <CardTitle id="login-form-title" className="text-2xl font-bold bg-gradient-to-r from-royal to-accent bg-clip-text text-transparent">
               LINAK Global
             </CardTitle>
             <CardDescription className="text-slate-600 mt-2">
@@ -149,8 +150,11 @@ export function LoginForm({ variant = "default", showDemo = true }: LoginFormPro
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-6">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <CardContent className="space-y-6">;
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate aria-describedby="form-instructions">
+            <p id="form-instructions" className="sr-only">
+              Please enter your email address and date of birth to access the client portal. Use MM/DD/YYYY or YYYY-MM-DD format for the date.
+            </p>
             {/* Email Field */}
             <div className="space-y-2">
               <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
@@ -241,7 +245,8 @@ export function LoginForm({ variant = "default", showDemo = true }: LoginFormPro
             <p>© 2025 LINAK Global Immigration Services</p>
           </div>
         </CardContent>
-      </Card>
+        </Card>
+      </main>
     </div>
   );
 }
