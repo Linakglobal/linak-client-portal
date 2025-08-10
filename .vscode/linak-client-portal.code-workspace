@@ -1,0 +1,20 @@
+{
+  "folders": [
+    {
+      "path": ".."
+    }
+  ],
+  "settings": {
+    "cSpell.enabled": true,
+    "cSpell.enabledFileTypes": {
+      "markdown": true,
+      "typescript": true,
+      "javascript": true,
+      "typescriptreact": true,
+      "javascriptreact": true,
+      "json": true,
+      "jsonc": true
+    },
+    "cSpell.configPath": "./cspell.json"
+  }
+}

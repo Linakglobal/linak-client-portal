@@ -1,0 +1,15 @@
+# LINAK Client Portal - Robots.txt
+User-agent: *
+Allow: /
+Allow: /destinations
+Allow: /migration-service
+
+# Protect private pages
+Disallow: /login
+Disallow: /dashboard
+Disallow: /documents
+Disallow: /profile
+Disallow: /admin
+
+# Sitemaps
+Sitemap: https://linak-client-portal.com/sitemap.xml

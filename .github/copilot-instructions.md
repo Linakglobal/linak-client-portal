@@ -1,34 +1,66 @@
-# Copilot Instructions for LINAK Client Portal
+# LINAK Client Portal - Copilot Instructions
 
 <!-- Use this file to provide workspace-specific custom instructions to Copilot. For more details, visit https://code.visualstudio.com/docs/copilot/copilot-customization#_use-a-githubcopilotinstructionsmd-file -->
 
 ## Project Overview
-This is a Next.js 15 + TypeScript project for the LINAK Client Portal with TailwindCSS and Shadcn UI components.
 
-## Code Style Guidelines
-- Use TypeScript for all new files
-- Follow Next.js 15 App Router conventions
-- Use Tailwind CSS for styling
-- Implement responsive design patterns
-- Use Shadcn UI components when possible
-- Follow React best practices and hooks patterns
+This is a premium LINAK Client Portal built with Next.js 15, TypeScript, Supabase, and Shadcn UI. The portal provides secure client authentication, document management, and profile management functionality.
+
+## Tech Stack
+
+- **Framework**: Next.js 15 with App Router
+- **Language**: TypeScript (strict mode)
+- **Styling**: TailwindCSS 3.4 + Shadcn UI Components
+- **Authentication**: Supabase Auth with email/DOB verification
+- **Database**: Supabase PostgreSQL
+- **Storage**: Supabase Storage for documents
+- **State Management**: Zustand
+- **Forms**: React Hook Form + Zod validation
+- **Icons**: Lucide React
+- **Animations**: Framer Motion
 
 ## Architecture Guidelines
-- Use the `src/` directory structure
-- Organize components in logical folders
-- Implement proper authentication and route protection
-- Use middleware for protected routes
-- Follow the separation of concerns principle
 
-## Authentication
-- Implement JWT-based authentication
-- Use NextAuth.js or similar for authentication management
-- Protect sensitive routes with middleware
-- Handle authentication state properly
+- Use App Router file-based routing structure
+- Implement route groups for authentication and client portal
+- Apply middleware for route protection
+- Use Server Components by default, Client Components when needed
+- Follow TypeScript strict typing patterns
+- Implement responsive design with mobile-first approach
 
-## UI/UX Guidelines
-- Use LINAK brand colors and styling
-- Implement consistent spacing and typography
-- Ensure accessibility compliance
-- Use semantic HTML elements
-- Implement proper loading states and error handling
+## Authentication System
+
+- Email + Date of Birth magic link authentication
+- Secure session management with Supabase
+- Route protection via middleware
+- Client profile management
+
+## Database Schema
+
+- `clients` table: id, user_id, email, name, dob, created_at
+- `documents` table: id, client_id, file_name, description, status, file_path, uploaded_at
+- `client-documents` storage bucket for file uploads
+
+## UI/UX Standards
+
+- Use luxurious gradient backgrounds and glassmorphism effects
+- Implement premium visual animations with Framer Motion
+- Follow Shadcn UI design patterns and components
+- Ensure accessibility and responsive design
+- Use consistent spacing and typography from TailwindCSS
+
+## Code Quality
+
+- Follow ESLint configuration
+- Use Prettier for formatting
+- Implement proper error handling
+- Add TypeScript interfaces and types
+- Write clean, maintainable code with proper comments
+
+## Security
+
+- Implement proper authentication checks
+- Validate all form inputs with Zod schemas
+- Secure file upload handling
+- Use environment variables for sensitive data
+- Follow Supabase security best practices
