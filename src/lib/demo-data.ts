@@ -56,6 +56,24 @@ export const demoClients: Client[] = [
     end_date: "2024-11-30",
     created_at: "2023-11-20T00:00:00Z",
   },
+  {
+    id: "4",
+    user_id: "demo-user-4",
+    email: "user@linak.com",
+    name: "Demo User",
+    dob: "1985-01-15",
+    company: "LINAK Demo Corporation",
+    phone: "+1 (555) 000-1234",
+    address: "100 Demo Street, Test City, ST 12345",
+    account_status: "active",
+    payment_amount: 50000,
+    currency: "USD",
+    payment_status: "completed",
+    contract_type: "Demo Account",
+    start_date: "2024-01-01",
+    end_date: "2025-12-31",
+    created_at: "2024-01-01T00:00:00Z",
+  },
 ];
 
 export const demoDocuments: Document[] = [
@@ -184,6 +202,30 @@ export const demoDocuments: Document[] = [
     file_size: 1234567,
     mime_type: "application/pdf",
     uploaded_at: "2024-06-30T17:30:00Z",
+  },
+  // Documents for Demo User
+  {
+    id: "11",
+    client_id: "4",
+    file_name: "Demo_Welcome_Guide.pdf",
+    description:
+      "Welcome guide for the LINAK Client Portal demo showcasing all available features.",
+    status: "approved",
+    file_path: "demo/documents/4/Demo_Welcome_Guide.pdf",
+    file_size: 1500000,
+    mime_type: "application/pdf",
+    uploaded_at: "2024-01-01T09:00:00Z",
+  },
+  {
+    id: "12",
+    client_id: "4",
+    file_name: "Sample_Contract.pdf",
+    description: "Sample service contract for demonstration purposes.",
+    status: "pending",
+    file_path: "demo/documents/4/Sample_Contract.pdf",
+    file_size: 890000,
+    mime_type: "application/pdf",
+    uploaded_at: "2024-06-15T14:30:00Z",
   },
 ];
 

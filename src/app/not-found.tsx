@@ -96,8 +96,8 @@ export default function NotFound() {
               Page Not Found
             </h2>
             <p className="text-lg text-gray-300 max-w-md mx-auto leading-relaxed">
-              The page you&apos;re looking for seems to have disappeared into the
-              digital void. Let&apos;s get you back to familiar territory.
+              The page you&apos;re looking for seems to have disappeared into
+              the digital void. Let&apos;s get you back to familiar territory.
             </p>
           </motion.div>
 
@@ -123,7 +123,7 @@ export default function NotFound() {
               size="lg"
               onClick={() => window.history.back()}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
+                if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
                   window.history.back();
                 }
