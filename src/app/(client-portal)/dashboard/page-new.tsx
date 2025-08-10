@@ -316,6 +316,25 @@ export default function DashboardPage() {
                       </div>
                     </div>
                   </Link>
+
+                  {/* Admin-only quick action */}
+                  {client?.email === 'user@linak.com' && (
+                    <Link href="/admin/clients" className="block">
+                      <div className="p-4 bg-slate-800/30 rounded-lg border border-slate-700/30 hover:border-red-500/30 transition-all duration-300 cursor-pointer group">
+                        <div className="flex items-center space-x-3">
+                          <Users className="w-5 h-5 text-blue-400 group-hover:text-blue-300" />
+                          <div>
+                            <p className="text-white font-medium">
+                              Admin Clients
+                            </p>
+                            <p className="text-slate-400 text-sm">
+                              Manage client accounts
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  )}
                 </CardContent>
               </Card>
 

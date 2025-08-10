@@ -11,6 +11,7 @@ import {
   FileText,
   Upload,
   User,
+  Users,
   LogOut,
   Menu,
   Sparkles,
@@ -60,6 +61,12 @@ const navigation = [
     href: "/admin/reports",
     icon: Shield,
     description: "Manage defamation reports",
+  },
+  {
+    name: "Admin Clients",
+    href: "/admin/clients",
+    icon: Users,
+    description: "Manage client accounts and data",
   },
 ];
 
