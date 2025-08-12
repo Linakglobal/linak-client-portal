@@ -43,9 +43,9 @@ export async function listClients(
   pageSize: number = 10
 ): Promise<ClientListResponse> {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const supabase = createServerComponentClient({
-      cookies: () => cookieStore,
+      cookies: () => Promise.resolve(cookieStore),
     });
 
     // Get current user and check admin permissions
@@ -104,9 +104,9 @@ export async function createClient(
   input: CreateClientInput
 ): Promise<{ success: boolean; client?: Client; error?: string }> {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const supabase = createServerComponentClient({
-      cookies: () => cookieStore,
+      cookies: () => Promise.resolve(cookieStore),
     });
 
     // Get current user and check admin permissions
@@ -173,9 +173,9 @@ export async function updateClient(
   input: UpdateClientInput
 ): Promise<{ success: boolean; client?: Client; error?: string }> {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const supabase = createServerComponentClient({
-      cookies: () => cookieStore,
+      cookies: () => Promise.resolve(cookieStore),
     });
 
     // Get current user and check admin permissions
@@ -251,9 +251,9 @@ export async function deleteClient(
   id: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const supabase = createServerComponentClient({
-      cookies: () => cookieStore,
+      cookies: () => Promise.resolve(cookieStore),
     });
 
     // Get current user and check admin permissions

@@ -28,13 +28,13 @@ export async function GET() {
       process.env.SUPABASE_SERVICE_ROLE_KEY,
       {
         cookies: {
-          get(name: string) {
+          get() {
             return undefined;
           },
-          set(name: string, value: string, options: any) {
+          set() {
             // No-op for service role
           },
-          remove(name: string, options: any) {
+          remove() {
             // No-op for service role
           },
         },

@@ -7,7 +7,9 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-const resend = new Resend(process.env.RESEND_API_KEY!);
+const resend = process.env.RESEND_API_KEY
+  ? new Resend(process.env.RESEND_API_KEY)
+  : null;
 
 export async function POST(request: NextRequest) {
   try {
@@ -95,11 +97,12 @@ export async function POST(request: NextRequest) {
 
     // Send email notification to management
     try {
-      await resend.emails.send({
-        from: "reports@linakmigration.com",
-        to: ["management@linakmigration.com", "admin@linakmigration.com"],
-        subject: `🚨 New Defamation Report Submitted - ${report.client_id}`,
-        html: `
+      if (resend) {
+        await resend.emails.send({
+          from: "reports@linakmigration.com",
+          to: ["management@linakmigration.com", "admin@linakmigration.com"],
+          subject: `🚨 New Defamation Report Submitted - ${report.client_id}`,
+          html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <h2 style="color: #8e44ad;">New Defamation Report Submitted</h2>
             
@@ -143,15 +146,16 @@ export async function POST(request: NextRequest) {
             
             <div style="text-align: center; margin: 30px 0;">
               <a href="${process.env.NEXT_PUBLIC_APP_URL}/admin/reports/${
-          report.id
-        }" 
+            report.id
+          }" 
                  style="background: #8e44ad; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px;">
                 Review Report in Admin Panel
               </a>
             </div>
           </div>
         `,
-      });
+        });
+      }
     } catch (emailError) {
       console.error("Email notification error:", emailError);
       // Don't fail the request if email fails
@@ -159,11 +163,12 @@ export async function POST(request: NextRequest) {
 
     // Send confirmation email to client
     try {
-      await resend.emails.send({
-        from: "noreply@linakmigration.com",
-        to: [reportData.client_email],
-        subject: "✅ Report Submitted Successfully - LINAK Migration",
-        html: `
+      if (resend) {
+        await resend.emails.send({
+          from: "noreply@linakmigration.com",
+          to: [reportData.client_email],
+          subject: "✅ Report Submitted Successfully - LINAK Migration",
+          html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <h2 style="color: #8e44ad;">Thank You for Protecting Our Community</h2>
             
@@ -197,7 +202,8 @@ export async function POST(request: NextRequest) {
             <strong>LINAK Migration Service Team</strong></p>
           </div>
         `,
-      });
+        });
+      }
     } catch (emailError) {
       console.error("Client confirmation email error:", emailError);
     }

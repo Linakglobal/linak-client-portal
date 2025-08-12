@@ -317,7 +317,7 @@ export default function DashboardPage() {
                   </Link>
 
                   {/* Admin-only quick action */}
-                  {client?.email === 'user@linak.com' && (
+                  {client?.email === "user@linak.com" && (
                     <Link href="/admin/clients" className="block">
                       <div className="p-4 bg-slate-800/30 rounded-lg border border-slate-700/30 hover:border-red-500/30 transition-all duration-300 cursor-pointer group">
                         <div className="flex items-center space-x-3">

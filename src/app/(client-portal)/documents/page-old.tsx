@@ -287,7 +287,13 @@ export default function DocumentsPage() {
                           className={`status-indicator ${getStatusIndicatorClass()}`}
                         ></span>
                         <Badge
-                          variant={getStatusColor(document.status) as any}
+                          variant={
+                            getStatusColor(document.status) as
+                              | "default"
+                              | "secondary"
+                              | "destructive"
+                              | "outline"
+                          }
                           className="capitalize"
                         >
                           {document.status}

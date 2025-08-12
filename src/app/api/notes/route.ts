@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // TODO: Implement notes fetching logic
     return NextResponse.json({ notes: [] });

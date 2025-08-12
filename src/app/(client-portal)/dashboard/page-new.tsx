@@ -134,7 +134,7 @@ export default function DashboardPage() {
                   Dashboard
                 </h1>
                 <p className="text-slate-400">
-                  Welcome back! Here's your migration progress overview.
+                  Welcome back! Here&apos;s your migration progress overview.
                 </p>
               </div>
               <div className="flex space-x-3">
@@ -318,7 +318,7 @@ export default function DashboardPage() {
                   </Link>
 
                   {/* Admin-only quick action */}
-                  {client?.email === 'user@linak.com' && (
+                  {client?.email === "user@linak.com" && (
                     <Link href="/admin/clients" className="block">
                       <div className="p-4 bg-slate-800/30 rounded-lg border border-slate-700/30 hover:border-red-500/30 transition-all duration-300 cursor-pointer group">
                         <div className="flex items-center space-x-3">

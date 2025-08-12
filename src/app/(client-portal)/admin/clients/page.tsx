@@ -31,6 +31,7 @@ import {
   Search,
   Plus,
   Edit,
+  Edit2,
   Trash2,
   Users,
   AlertTriangle,
@@ -40,7 +41,7 @@ import {
   FileSpreadsheet,
   FileText,
 } from "lucide-react";
-import Papa from 'papaparse';
+import Papa from "papaparse";
 import {
   listClients,
   createClient,
@@ -62,7 +63,7 @@ export default function AdminClientsPage() {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  
+
   // CSV Import states
   const [showImportDialog, setShowImportDialog] = useState(false);
   const [csvFile, setCsvFile] = useState<File | null>(null);
@@ -80,10 +81,10 @@ export default function AdminClientsPage() {
     company: "",
     phone: "",
     address: "",
-    account_status: "active" as const,
+    account_status: "active" as "active" | "inactive" | "suspended",
     payment_amount: "",
     currency: "USD",
-    payment_status: "pending" as const,
+    payment_status: "pending" as "completed" | "pending" | "overdue",
     contract_type: "",
     start_date: "",
     end_date: "",
@@ -268,11 +269,11 @@ export default function AdminClientsPage() {
   // CSV Import handlers
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file && file.type === 'text/csv') {
+    if (file && file.type === "text/csv") {
       setCsvFile(file);
       setImportResults(null);
     } else {
-      alert('Please select a valid CSV file');
+      alert("Please select a valid CSV file");
     }
   };
 
@@ -291,30 +292,42 @@ export default function AdminClientsPage() {
 
         // Process each row
         for (let i = 0; i < results.data.length; i++) {
-          const row = results.data[i] as any;
-          
+          const row = results.data[i] as Record<string, unknown>;
+
           try {
             // Validate required fields
             if (!row.name || !row.email || !row.dob) {
-              errors.push(`Row ${i + 1}: Missing required fields (name, email, dob)`);
+              errors.push(
+                `Row ${i + 1}: Missing required fields (name, email, dob)`
+              );
               continue;
             }
 
             // Create client data
             const clientData = {
-              name: row.name,
-              email: row.email,
-              dob: row.dob,
-              company: row.company || '',
-              phone: row.phone || '',
-              address: row.address || '',
-              account_status: (row.account_status as 'active' | 'inactive' | 'suspended') || 'active',
-              payment_amount: row.payment_amount ? parseFloat(row.payment_amount) : undefined,
-              currency: row.currency || 'USD',
-              payment_status: (row.payment_status as 'completed' | 'pending' | 'overdue') || 'pending',
-              contract_type: row.contract_type || '',
-              start_date: row.start_date || '',
-              end_date: row.end_date || '',
+              name: String(row.name || ""),
+              email: String(row.email || ""),
+              dob: String(row.dob || ""),
+              company: String(row.company || ""),
+              phone: String(row.phone || ""),
+              address: String(row.address || ""),
+              account_status:
+                (String(row.account_status) as
+                  | "active"
+                  | "inactive"
+                  | "suspended") || "active",
+              payment_amount: row.payment_amount
+                ? parseFloat(String(row.payment_amount))
+                : undefined,
+              currency: String(row.currency || "USD"),
+              payment_status:
+                (String(row.payment_status) as
+                  | "completed"
+                  | "pending"
+                  | "overdue") || "pending",
+              contract_type: String(row.contract_type || ""),
+              start_date: String(row.start_date || ""),
+              end_date: String(row.end_date || ""),
             };
 
             // Attempt to create client
@@ -322,25 +335,36 @@ export default function AdminClientsPage() {
             if (result.success) {
               successCount++;
             } else {
-              errors.push(`Row ${i + 1} (${row.name}): ${result.error || 'Failed to create client'}`);
+              errors.push(
+                `Row ${i + 1} (${row.name}): ${
+                  result.error || "Failed to create client"
+                }`
+              );
             }
           } catch (error) {
-            errors.push(`Row ${i + 1} (${row.name || 'Unknown'}): ${error instanceof Error ? error.message : 'Unknown error'}`);
+            errors.push(
+              `Row ${i + 1} (${row.name || "Unknown"}): ${
+                error instanceof Error ? error.message : "Unknown error"
+              }`
+            );
           }
         }
 
         setImportResults({ success: successCount, errors });
         setIsImporting(false);
-        
+
         // Refresh the clients list
         if (successCount > 0) {
           loadClients(currentPage, searchQuery);
         }
       },
       error: (error) => {
-        setImportResults({ success: 0, errors: [`CSV parsing error: ${error.message}`] });
+        setImportResults({
+          success: 0,
+          errors: [`CSV parsing error: ${error.message}`],
+        });
         setIsImporting(false);
-      }
+      },
     });
   };
 
@@ -348,12 +372,12 @@ export default function AdminClientsPage() {
     const csvContent = `name,email,dob,company,phone,address,account_status,payment_amount,currency,payment_status,contract_type,start_date,end_date
 John Doe,john@example.com,1985-01-15,Example Corp,+1234567890,123 Main St,active,5000.00,USD,completed,Premium,2024-01-01,2024-12-31
 Jane Smith,jane@example.com,1990-05-20,Tech Solutions,+1987654321,456 Oak Ave,active,3000.00,USD,pending,Standard,2024-02-01,2024-11-30`;
-    
-    const blob = new Blob([csvContent], { type: 'text/csv' });
+
+    const blob = new Blob([csvContent], { type: "text/csv" });
     const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.download = 'clients-sample.csv';
+    link.download = "clients-sample.csv";
     link.click();
     window.URL.revokeObjectURL(url);
   };
@@ -553,10 +577,14 @@ Jane Smith,jane@example.com,1990-05-20,Tech Solutions,+1987654321,456 Oak Ave,ac
           />
         </div>
         <div>
-          <label className="block text-white text-sm font-medium mb-2">
+          <label
+            className="block text-white text-sm font-medium mb-2"
+            htmlFor="start-date-input"
+          >
             Start Date
           </label>
           <Input
+            id="start-date-input"
             type="date"
             value={formData.start_date}
             onChange={(e) =>
@@ -581,10 +609,14 @@ Jane Smith,jane@example.com,1990-05-20,Tech Solutions,+1987654321,456 Oak Ave,ac
       </div>
 
       <div>
-        <label className="block text-white text-sm font-medium mb-2">
+        <label
+          className="block text-white text-sm font-medium mb-2"
+          htmlFor="contract-type-input"
+        >
           Contract Type
         </label>
         <Input
+          id="contract-type-input"
           value={formData.contract_type}
           onChange={(e) =>
             setFormData({ ...formData, contract_type: e.target.value })
@@ -699,150 +731,291 @@ Jane Smith,jane@example.com,1990-05-20,Tech Solutions,+1987654321,456 Oak Ave,ac
                 </p>
               </div>
             ) : (
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow className="border-white/20 hover:bg-white/5">
-                      <TableHead className="text-white/80">Name</TableHead>
-                      <TableHead className="text-white/80">Email</TableHead>
-                      <TableHead className="text-white/80">Company</TableHead>
-                      <TableHead className="text-white/80">Status</TableHead>
-                      <TableHead className="text-white/80">Payment</TableHead>
-                      <TableHead className="text-white/80">
-                        Contract Period
-                      </TableHead>
-                      <TableHead className="text-white/80 text-right">
-                        Actions
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {clients.map((client) => {
-                      const statusVariant =
-                        client.account_status === "active"
-                          ? "default"
-                          : client.account_status === "suspended"
-                          ? "destructive"
-                          : "secondary";
-                      const statusClassName =
-                        client.account_status === "active"
-                          ? "bg-green-500/20 text-green-400 border-green-500/30"
-                          : client.account_status === "suspended"
-                          ? "bg-red-500/20 text-red-400 border-red-500/30"
-                          : "bg-gray-500/20 text-gray-400 border-gray-500/30";
-                      const paymentClassName =
-                        client.payment_status === "completed"
-                          ? "border-green-500/30 text-green-400"
-                          : client.payment_status === "overdue"
-                          ? "border-red-500/30 text-red-400"
-                          : "border-yellow-500/30 text-yellow-400";
+              <>
+                {/* Mobile Cards View (screens smaller than lg) */}
+                <div className="lg:hidden">
+                  {clients.map((client) => {
+                    const statusClassName =
+                      client.account_status === "active"
+                        ? "bg-green-500/20 text-green-400 border-green-500/30"
+                        : client.account_status === "suspended"
+                        ? "bg-red-500/20 text-red-400 border-red-500/30"
+                        : "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
 
-                      return (
-                        <TableRow
-                          key={client.id}
-                          className="border-white/20 hover:bg-white/5"
-                        >
-                          <TableCell>
-                            <div>
-                              <p className="text-white font-medium">
-                                {client.name}
-                              </p>
-                              <p className="text-xs text-white/60">
-                                {client.dob}
-                              </p>
-                            </div>
-                          </TableCell>
-                          <TableCell className="text-white/80">
-                            {client.email}
-                          </TableCell>
-                          <TableCell className="text-white/80">
-                            {client.company || "-"}
-                          </TableCell>
-                          <TableCell>
-                            <Badge
-                              variant={statusVariant}
-                              className={statusClassName}
-                            >
-                              {client.account_status || "active"}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            <div>
-                              {client.payment_amount && (
-                                <p className="text-white font-medium">
-                                  {new Intl.NumberFormat("en-US", {
-                                    style: "currency",
-                                    currency: client.currency || "USD",
-                                  }).format(client.payment_amount)}
+                    const paymentStatusClassName =
+                      client.payment_status === "completed"
+                        ? "bg-green-500/20 text-green-400"
+                        : client.payment_status === "overdue"
+                        ? "bg-red-500/20 text-red-400"
+                        : "bg-yellow-500/20 text-yellow-400";
+
+                    return (
+                      <Card
+                        key={client.id}
+                        className="m-4 bg-white/5 backdrop-blur-sm border-white/10"
+                      >
+                        <CardContent className="p-4">
+                          <div className="space-y-3">
+                            <div className="flex items-start justify-between">
+                              <div>
+                                <h3 className="font-semibold text-white text-sm">
+                                  {client.name || "Unnamed Client"}
+                                </h3>
+                                <p className="text-xs text-white/60 break-all">
+                                  {client.email}
                                 </p>
-                              )}
-                              <Badge
-                                variant="outline"
-                                className={paymentClassName}
-                              >
-                                {client.payment_status || "pending"}
+                                {client.company && (
+                                  <p className="text-xs text-white/50 mt-1">
+                                    {client.company}
+                                  </p>
+                                )}
+                              </div>
+                              <Badge className={`text-xs ${statusClassName}`}>
+                                {client.account_status || "active"}
                               </Badge>
                             </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="text-sm">
-                              {client.start_date && (
-                                <p className="text-white/80">
-                                  {new Date(
-                                    client.start_date
-                                  ).toLocaleDateString()}
-                                </p>
+
+                            {client.payment_amount &&
+                              client.payment_amount > 0 && (
+                                <div className="flex items-center justify-between">
+                                  <span className="text-xs text-white/60">
+                                    Payment:
+                                  </span>
+                                  <div className="flex items-center gap-2">
+                                    <Badge
+                                      className={`text-xs ${paymentStatusClassName}`}
+                                    >
+                                      {client.payment_status || "pending"}
+                                    </Badge>
+                                    <span className="text-xs font-mono text-white/80">
+                                      {new Intl.NumberFormat("en-US", {
+                                        style: "currency",
+                                        currency: client.currency || "USD",
+                                      }).format(client.payment_amount)}
+                                    </span>
+                                  </div>
+                                </div>
                               )}
-                              {client.end_date && (
-                                <p className="text-white/60">
-                                  to{" "}
-                                  {new Date(
-                                    client.end_date
-                                  ).toLocaleDateString()}
-                                </p>
-                              )}
-                              {client.contract_type && (
-                                <p className="text-xs text-white/50 mt-1">
-                                  {client.contract_type}
-                                </p>
-                              )}
+
+                            {(client.start_date || client.end_date) && (
+                              <div className="text-xs text-white/50">
+                                <span>Contract: </span>
+                                {client.start_date && (
+                                  <span>
+                                    {new Date(
+                                      client.start_date
+                                    ).toLocaleDateString()}
+                                  </span>
+                                )}
+                                {client.start_date && client.end_date && (
+                                  <span> - </span>
+                                )}
+                                {client.end_date && (
+                                  <span>
+                                    {new Date(
+                                      client.end_date
+                                    ).toLocaleDateString()}
+                                  </span>
+                                )}
+                              </div>
+                            )}
+
+                            <div className="flex items-center justify-between pt-2 border-t border-white/10">
+                              <span className="text-xs text-white/40">
+                                {new Date(
+                                  client.created_at
+                                ).toLocaleDateString()}
+                              </span>
+                              <div className="flex items-center gap-1">
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  onClick={() =>
+                                    window.open(
+                                      `/documents?client=${client.id}`,
+                                      "_blank"
+                                    )
+                                  }
+                                  className="h-7 w-7 p-0 text-blue-400 hover:bg-blue-500/20"
+                                >
+                                  <FileText className="w-3 h-3" />
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  onClick={() => openEditDialog(client)}
+                                  className="h-7 w-7 p-0 text-white/60 hover:bg-white/10"
+                                >
+                                  <Edit2 className="w-3 h-3" />
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  onClick={() => openDeleteDialog(client)}
+                                  className="h-7 w-7 p-0 text-red-400 hover:bg-red-500/20"
+                                >
+                                  <Trash2 className="w-3 h-3" />
+                                </Button>
+                              </div>
                             </div>
-                          </TableCell>
-                          <TableCell className="text-right">
-                            <div className="flex justify-end gap-2">
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => window.open(`/documents?client=${client.id}`, '_blank')}
-                                className="border-blue-500/30 text-blue-400 hover:bg-blue-500/10"
-                                title="View Documents"
+                          </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+
+                {/* Desktop Table View (lg screens and larger) */}
+                <div className="hidden lg:block overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="border-white/20 hover:bg-white/5">
+                        <TableHead className="text-white/80">Name</TableHead>
+                        <TableHead className="text-white/80">Email</TableHead>
+                        <TableHead className="text-white/80">Company</TableHead>
+                        <TableHead className="text-white/80">Status</TableHead>
+                        <TableHead className="text-white/80">Payment</TableHead>
+                        <TableHead className="text-white/80">
+                          Contract Period
+                        </TableHead>
+                        <TableHead className="text-white/80 text-right">
+                          Actions
+                        </TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {clients.map((client) => {
+                        const statusVariant =
+                          client.account_status === "active"
+                            ? "default"
+                            : client.account_status === "suspended"
+                            ? "destructive"
+                            : "secondary";
+                        const statusClassName =
+                          client.account_status === "active"
+                            ? "bg-green-500/20 text-green-400 border-green-500/30"
+                            : client.account_status === "suspended"
+                            ? "bg-red-500/20 text-red-400 border-red-500/30"
+                            : "bg-gray-500/20 text-gray-400 border-gray-500/30";
+                        const paymentClassName =
+                          client.payment_status === "completed"
+                            ? "border-green-500/30 text-green-400"
+                            : client.payment_status === "overdue"
+                            ? "border-red-500/30 text-red-400"
+                            : "border-yellow-500/30 text-yellow-400";
+
+                        return (
+                          <TableRow
+                            key={client.id}
+                            className="border-white/20 hover:bg-white/5"
+                          >
+                            <TableCell>
+                              <div>
+                                <p className="text-white font-medium">
+                                  {client.name}
+                                </p>
+                                <p className="text-xs text-white/60">
+                                  {client.dob}
+                                </p>
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-white/80">
+                              {client.email}
+                            </TableCell>
+                            <TableCell className="text-white/80">
+                              {client.company || "-"}
+                            </TableCell>
+                            <TableCell>
+                              <Badge
+                                variant={statusVariant}
+                                className={statusClassName}
                               >
-                                <FileText className="w-4 h-4" />
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => openEditDialog(client)}
-                                className="border-white/20 text-white/80 hover:bg-white/10"
-                              >
-                                <Edit className="w-4 h-4" />
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => openDeleteDialog(client)}
-                                className="border-red-500/30 text-red-400 hover:bg-red-500/10"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </div>
+                                {client.account_status || "active"}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <div>
+                                {client.payment_amount && (
+                                  <p className="text-white font-medium">
+                                    {new Intl.NumberFormat("en-US", {
+                                      style: "currency",
+                                      currency: client.currency || "USD",
+                                    }).format(client.payment_amount)}
+                                  </p>
+                                )}
+                                <Badge
+                                  variant="outline"
+                                  className={paymentClassName}
+                                >
+                                  {client.payment_status || "pending"}
+                                </Badge>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <div className="text-sm">
+                                {client.start_date && (
+                                  <p className="text-white/80">
+                                    {new Date(
+                                      client.start_date
+                                    ).toLocaleDateString()}
+                                  </p>
+                                )}
+                                {client.end_date && (
+                                  <p className="text-white/60">
+                                    to{" "}
+                                    {new Date(
+                                      client.end_date
+                                    ).toLocaleDateString()}
+                                  </p>
+                                )}
+                                {client.contract_type && (
+                                  <p className="text-xs text-white/50 mt-1">
+                                    {client.contract_type}
+                                  </p>
+                                )}
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <div className="flex justify-end gap-2">
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() =>
+                                    window.open(
+                                      `/documents?client=${client.id}`,
+                                      "_blank"
+                                    )
+                                  }
+                                  className="border-blue-500/30 text-blue-400 hover:bg-blue-500/10"
+                                  title="View Documents"
+                                >
+                                  <FileText className="w-4 h-4" />
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => openEditDialog(client)}
+                                  className="border-white/20 text-white/80 hover:bg-white/10"
+                                >
+                                  <Edit className="w-4 h-4" />
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => openDeleteDialog(client)}
+                                  className="border-red-500/30 text-red-400 hover:bg-red-500/10"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </div>
+              </>
             )}
           </CardContent>
         </Card>
@@ -969,10 +1142,11 @@ Jane Smith,jane@example.com,1990-05-20,Tech Solutions,+1987654321,456 Oak Ave,ac
                 Import Clients from CSV
               </DialogTitle>
               <DialogDescription className="text-white/70">
-                Upload a CSV file to bulk import client data. Download the sample template to see the required format.
+                Upload a CSV file to bulk import client data. Download the
+                sample template to see the required format.
               </DialogDescription>
             </DialogHeader>
-            
+
             <div className="space-y-6">
               {/* File Upload Section */}
               <div>
@@ -988,7 +1162,7 @@ Jane Smith,jane@example.com,1990-05-20,Tech Solutions,+1987654321,456 Oak Ave,ac
                     Download Sample
                   </Button>
                 </div>
-                
+
                 <div className="border-2 border-dashed border-slate-600 rounded-lg p-6 text-center">
                   <FileSpreadsheet className="w-12 h-12 text-slate-400 mx-auto mb-4" />
                   <div>
@@ -1022,19 +1196,21 @@ Jane Smith,jane@example.com,1990-05-20,Tech Solutions,+1987654321,456 Oak Ave,ac
               {importResults && (
                 <div className="space-y-3">
                   <h3 className="text-white font-medium">Import Results</h3>
-                  
+
                   {importResults.success > 0 && (
                     <div className="p-3 bg-green-500/20 border border-green-500/30 rounded-lg">
                       <p className="text-green-400 text-sm">
-                        ✅ Successfully imported {importResults.success} client{importResults.success !== 1 ? 's' : ''}
+                        ✅ Successfully imported {importResults.success} client
+                        {importResults.success !== 1 ? "s" : ""}
                       </p>
                     </div>
                   )}
-                  
+
                   {importResults.errors.length > 0 && (
                     <div className="p-3 bg-red-500/20 border border-red-500/30 rounded-lg">
                       <p className="text-red-400 text-sm font-medium mb-2">
-                        ❌ {importResults.errors.length} error{importResults.errors.length !== 1 ? 's' : ''} occurred:
+                        ❌ {importResults.errors.length} error
+                        {importResults.errors.length !== 1 ? "s" : ""} occurred:
                       </p>
                       <div className="max-h-32 overflow-y-auto space-y-1">
                         {importResults.errors.map((error, index) => (
@@ -1050,8 +1226,8 @@ Jane Smith,jane@example.com,1990-05-20,Tech Solutions,+1987654321,456 Oak Ave,ac
 
               {/* Action Buttons */}
               <div className="flex justify-end gap-3 pt-4">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={() => {
                     setShowImportDialog(false);
                     setCsvFile(null);
@@ -1059,9 +1235,9 @@ Jane Smith,jane@example.com,1990-05-20,Tech Solutions,+1987654321,456 Oak Ave,ac
                   }}
                   disabled={isImporting}
                 >
-                  {importResults ? 'Close' : 'Cancel'}
+                  {importResults ? "Close" : "Cancel"}
                 </Button>
-                <Button 
+                <Button
                   onClick={handleCsvImport}
                   disabled={!csvFile || isImporting}
                   className="bg-green-600 hover:bg-green-700"

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
@@ -15,9 +15,23 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Immigration Support Portal - Welcome Home",
+  title: "LINAK Client Portal - Secure Document Management",
   description:
-    "Comprehensive immigration support services helping families find new homes, navigate documentation, learn languages, and build communities. Your journey to a new beginning starts here.",
+    "Professional client portal for LINAK Global Migration services. Secure document management, client authentication, and comprehensive immigration support.",
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: "/manifest.json",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  themeColor: "#6f42c1",
+  colorScheme: "dark",
 };
 
 export default function RootLayout({

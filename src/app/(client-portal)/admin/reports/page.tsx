@@ -53,7 +53,7 @@ interface Report {
   created_at: string;
   verified_at?: string;
   notes?: string;
-  metadata?: any;
+  metadata?: Record<string, unknown>;
 }
 
 export default function AdminReportsPage() {
@@ -61,17 +61,9 @@ export default function AdminReportsPage() {
   const [loading, setLoading] = useState(true);
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
   const [reviewNotes, setReviewNotes] = useState("");
-  const [stats, setStats] = useState({
-    total: 0,
-    pending: 0,
-    verified: 0,
-    rejected: 0,
-    totalRewards: 0,
-  });
 
   useEffect(() => {
     loadReports();
-    loadStats();
   }, []);
 
   const loadReports = async () => {
@@ -142,18 +134,6 @@ export default function AdminReportsPage() {
     }
   };
 
-  const loadStats = async () => {
-    try {
-      const response = await fetch("/api/admin/reports/stats");
-      if (response.ok) {
-        const data = await response.json();
-        setStats(data);
-      }
-    } catch (error) {
-      console.error("Error loading stats:", error);
-    }
-  };
-
   const updateReportStatus = async (
     reportId: string,
     status: "verified" | "rejected",
@@ -194,7 +174,6 @@ export default function AdminReportsPage() {
       toast.success(`Report ${status} successfully`);
       setSelectedReport(null);
       setReviewNotes("");
-      loadStats(); // Refresh stats
     } catch (error) {
       console.error("Error updating report:", error);
       toast.error("Failed to update report status");
@@ -646,7 +625,7 @@ export default function AdminReportsPage() {
                                         <h4 className="font-semibold text-white mb-3 flex items-center space-x-2">
                                           <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
                                           <span>
-                                            Client's Detailed Explanation
+                                            Client&apos;s Detailed Explanation
                                           </span>
                                         </h4>
                                         <div className="bg-slate-900/50 backdrop-blur p-4 rounded-lg border border-slate-700/50">
@@ -716,7 +695,8 @@ export default function AdminReportsPage() {
                                           </h4>
                                           <div className="bg-slate-900/50 backdrop-blur p-4 rounded-lg border border-slate-700/50">
                                             <p className="text-slate-200 leading-relaxed italic">
-                                              "{selectedReport.notes}"
+                                              &ldquo;{selectedReport.notes}
+                                              &rdquo;
                                             </p>
                                             {selectedReport.verified_at && (
                                               <p className="text-slate-400 text-sm mt-2">

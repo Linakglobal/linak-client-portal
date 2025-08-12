@@ -107,7 +107,7 @@ export default function ReportsPage() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-20"
             >
-              {stats.map((stat, index) => {
+              {stats.map((stat) => {
                 const IconComponent = stat.icon;
                 return (
                   <Card

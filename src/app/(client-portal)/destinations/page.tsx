@@ -972,7 +972,7 @@ export default function DestinationsPage() {
                       {/* Testimonial */}
                       <div className="bg-white/5 p-3 rounded-lg">
                         <p className="text-white/90 text-sm italic mb-2">
-                          "{country.testimonial}"
+                          &ldquo;{country.testimonial}&rdquo;
                         </p>
                         <p className="text-slate-400 text-xs">
                           - {country.clientName}

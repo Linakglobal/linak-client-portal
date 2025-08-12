@@ -1,0 +1,74 @@
+{
+  "name": "LINAK Client Portal",
+  "short_name": "LINAK Portal",
+  "description": "Professional client portal for LINAK Global Migration services",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d0b16",
+  "theme_color": "#6f42c1",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/linak-logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity"],
+  "screenshots": [
+    {
+      "src": "/screenshots/dashboard-mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshots/dashboard-desktop.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "Access client dashboard",
+      "url": "/dashboard",
+      "icons": [
+        {
+          "src": "/linak-logo.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Documents",
+      "short_name": "Documents",
+      "description": "View documents",
+      "url": "/documents",
+      "icons": [
+        {
+          "src": "/linak-logo.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "short_name": "Admin",
+      "description": "Admin panel",
+      "url": "/admin/clients",
+      "icons": [
+        {
+          "src": "/linak-logo.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ]
+}
