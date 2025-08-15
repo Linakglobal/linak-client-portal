@@ -1,25 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  Globe2,
-  ShieldCheck,
-  Headphones,
-  Award,
-  Users,
-  Shield,
-  Mail,
-  Phone,
-} from "lucide-react";
+import { Globe, Users, Award, Shield, Mail, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 
-// Note: publicServices defined for potential future use
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const publicServices = [
   {
-    icon: Globe2,
+    icon: Globe,
     title: "Immigration Consultation",
     description: "Expert guidance for your migration journey",
   },
@@ -67,6 +56,13 @@ const trustServices = [
   },
 ];
 
+const stats = [
+  { label: "Clients Helped So Far", value: "100+", icon: Users },
+  { label: "Countries Supported", value: "50+", icon: Globe },
+  { label: "Case Recovery Success Rate", value: "95%", icon: Award },
+  { label: "Years of Industry Insight", value: "7+", icon: Shield },
+];
+
 export default function PublicHomePage() {
   return (
     <div className="min-h-screen bg-velvet relative overflow-hidden">
@@ -110,20 +106,17 @@ export default function PublicHomePage() {
             transition={{ duration: 0.8 }}
             className="mb-8"
           >
-            <h1 className="text-6xl md:text-8xl font-black text-gradient glow-text mb-8 leading-none tracking-tight">
+            <h1 className="text-5xl md:text-7xl font-bold text-gradient glow-text mb-6">
               Your Immigration
               <br />
-              <span className="animate-shimmer bg-gradient-to-r from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent">
+              <span className="text-accent animate-shimmer">
                 Journey Starts Here
               </span>
             </h1>
-            <p className="text-2xl md:text-3xl text-gray-200 max-w-4xl mx-auto leading-relaxed font-light tracking-wide drop-shadow-lg">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
               Expert immigration consulting services with cutting-edge
-              technology and{" "}
-              <span className="text-purple-300 font-medium">
-                personalized solutions
-              </span>{" "}
-              for your global mobility needs.
+              technology and personalized solutions for your global mobility
+              needs.
             </p>
           </motion.div>
 
@@ -141,89 +134,45 @@ export default function PublicHomePage() {
             </Button>
           </motion.div>
 
-          {/* Refined Stats Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12"
-          >
-            {[
-              { number: "100+", label: "Clients", icon: Award },
-              { number: "25+", label: "Countries Served", icon: Globe2 },
-              { number: "98%", label: "Success Rate", icon: ShieldCheck },
-              { number: "24/7", label: "Support", icon: Headphones },
-            ].map((stat, index) => {
-              const IconComponent = stat.icon;
-              return (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  whileHover={{
-                    scale: 1.02,
-                    transition: { duration: 0.2 },
-                  }}
-                  className="text-center p-8 rounded-2xl bg-gradient-to-br from-purple-950/80 to-indigo-950/60 border border-white/5 backdrop-blur-sm shadow-2xl hover:shadow-purple-500/10 hover:bg-gradient-to-br hover:from-purple-950/90 hover:to-indigo-950/70 transition-all duration-300"
-                >
-                  {/* Glass Icon Pill */}
-                  <div className="flex justify-center mb-6">
-                    <div className="w-12 h-12 rounded-xl bg-white/5 ring-1 ring-white/10 flex items-center justify-center">
-                      <IconComponent
-                        className="w-8 h-8 stroke-2"
-                        style={{
-                          stroke: "url(#metallic-gradient)",
-                          opacity: 0.4,
-                          strokeWidth: 1.5,
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Number */}
-                  <div className="text-4xl font-extrabold text-white tracking-tight mb-2">
-                    {stat.number}
-                  </div>
-
-                  {/* Label */}
-                  <div className="text-sm text-white/70 font-medium tracking-wide">
-                    {stat.label}
-                  </div>
-                </motion.div>
-              );
-            })}
-          </motion.div>
-
-          {/* SVG Gradient Definition */}
-          <svg width="0" height="0" className="absolute">
-            <defs>
-              <linearGradient
-                id="metallic-gradient"
-                x1="0%"
-                y1="0%"
-                x2="100%"
-                y2="100%"
-              >
-                <stop offset="0%" stopColor="#E7D9FF" />
-                <stop offset="100%" stopColor="#8A5CF6" />
-              </linearGradient>
-            </defs>
-          </svg>
-
+          {/* Stats */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
             className="text-center mb-12"
           >
-            <h2 className="text-4xl font-bold text-white mb-4 drop-shadow-lg">
-              We&apos;ve Already Made Progress
+            <h2 className="text-3xl font-bold text-white mb-2">
+              We've Already Made Progress
             </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
-              Here&apos;s what we&apos;ve achieved so far, and we&apos;re just
-              getting started.
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Here's what we've achieved so far, and we're just getting started.
             </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.8 }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto"
+          >
+            {stats.map((stat) => {
+              const IconComponent = stat.icon;
+              return (
+                <motion.div
+                  key={stat.label}
+                  whileHover={{ scale: 1.05 }}
+                  className="tech-card p-6 text-center"
+                >
+                  <IconComponent className="w-8 h-8 text-accent mx-auto mb-3 animate-float" />
+                  <div className="text-3xl font-bold text-gradient mb-2">
+                    {stat.value}
+                  </div>
+                  <div className="text-muted-foreground text-sm">
+                    {stat.label}
+                  </div>
+                </motion.div>
+              );
+            })}
           </motion.div>
         </div>
       </section>
@@ -237,14 +186,13 @@ export default function PublicHomePage() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <h2 className="text-5xl md:text-6xl font-black text-center bg-gradient-to-br from-purple-300 via-pink-400 to-blue-400 bg-clip-text text-transparent tracking-tight mb-6 leading-tight drop-shadow-2xl">
+            <h2 className="text-4xl font-extrabold text-center bg-gradient-to-br from-purple-400 via-pink-500 to-blue-500 bg-clip-text text-transparent tracking-tight mb-4">
               Our Vision — Built on Trust
             </h2>
-            <p className="text-center text-gray-200 max-w-4xl mx-auto text-xl md:text-2xl font-medium leading-relaxed tracking-wide drop-shadow-lg">
-              We know your expectations. And we know your pain. But we
-              haven&apos;t run — we&apos;re standing right here with you. Our
-              mission is to make every promise right — no matter what happened
-              before.
+            <p className="text-center text-muted-foreground max-w-3xl mx-auto text-lg">
+              We know your expectations. And we know your pain. But we haven't
+              run — we're standing right here with you. Our mission is to make
+              every promise right — no matter what happened before.
             </p>
           </motion.div>
 
@@ -259,11 +207,11 @@ export default function PublicHomePage() {
                 className={`rounded-xl ${service.border} bg-gradient-to-br ${service.gradient} p-6 text-white shadow-xl`}
               >
                 <h3
-                  className={`text-2xl font-bold ${service.titleColor} mb-3 leading-tight tracking-wide`}
+                  className={`text-xl font-semibold ${service.titleColor} mb-2`}
                 >
                   {service.title}
                 </h3>
-                <p className="text-base text-gray-100 font-medium leading-relaxed">
+                <p className="text-sm text-muted-foreground">
                   {service.description}
                 </p>
               </motion.div>
@@ -278,77 +226,46 @@ export default function PublicHomePage() {
             className="text-center mt-10"
           >
             <p className="text-muted-foreground text-md max-w-2xl mx-auto italic">
-              &ldquo;We&apos;ve heard the pain. We&apos;ve seen the messages. We
-              don&apos;t hide from the truth. But the real truth is — we are
-              still here. Building. Serving. Evolving.
+              "We've heard the pain. We've seen the messages. We don't hide from
+              the truth. But the real truth is — we are still here. Building.
+              Serving. Evolving.
               <br />
               <span className="text-white font-medium">
                 Stay strong. Stay connected. Stay with LINAK.
               </span>
-              &rdquo;
+              "
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Enhanced CTA Section */}
-      <section className="py-24 relative overflow-hidden">
-        {/* Background Effects */}
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-900/20 via-pink-900/20 to-blue-900/20" />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" />
-
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+      {/* CTA Section */}
+      <section className="py-20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6 }}
-            className="tech-card p-16 border-2 border-purple-500/30"
+            className="tech-card p-12"
           >
-            <div className="mb-8">
-              <span className="inline-block px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-sm font-semibold rounded-full mb-4">
-                🚀 Start Your Journey Today
-              </span>
-              <h2 className="text-5xl md:text-6xl font-black text-gradient glow-text mb-6 leading-tight">
-                Ready to Transform
-                <br />
-                Your Future?
-              </h2>
-              <p className="text-2xl text-gray-200 mb-8 max-w-3xl mx-auto leading-relaxed">
-                Join <span className="text-purple-300 font-bold">1000+</span>{" "}
-                successful clients who have achieved their immigration dreams
-                with our expert guidance and cutting-edge solutions.
-              </p>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+            <h2 className="text-4xl font-bold text-gradient glow-text mb-6">
+              Ready to Begin Your Journey?
+            </h2>
+            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Join thousands of successful clients who have achieved their
+              immigration dreams with our expert guidance and cutting-edge
+              solutions.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/login">
-                <Button className="neon-button text-xl px-12 py-6 min-w-[250px] transform hover:scale-105 transition-all duration-300">
-                  <Shield className="w-6 h-6 mr-3" />
+                <Button className="neon-button text-lg px-8 py-4">
                   Access Client Portal
                 </Button>
               </Link>
-              <Button className="btn-secondary text-xl px-12 py-6 min-w-[250px] border-2 border-purple-500/50 hover:border-purple-400 transition-all duration-300">
-                <Mail className="w-6 h-6 mr-3" />
-                Schedule Consultation
+              <Button className="btn-secondary text-lg px-8 py-4">
+                <Mail className="w-5 h-5 mr-2" />
+                Contact Us
               </Button>
-            </div>
-
-            {/* Trust Indicators */}
-            <div className="mt-12 pt-8 border-t border-white/10">
-              <div className="flex flex-wrap justify-center items-center gap-8 text-gray-400">
-                <div className="flex items-center gap-2">
-                  <Shield className="w-5 h-5 text-green-400" />
-                  <span>100% Secure</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Award className="w-5 h-5 text-yellow-400" />
-                  <span>Licensed Experts</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Users className="w-5 h-5 text-blue-400" />
-                  <span>24/7 Support</span>
-                </div>
-              </div>
             </div>
           </motion.div>
         </div>
@@ -372,20 +289,6 @@ export default function PublicHomePage() {
           </p>
         </div>
       </footer>
-
-      {/* Floating Action Button */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 2, duration: 0.5 }}
-        className="fixed bottom-8 right-8 z-50"
-      >
-        <Link href="/login">
-          <Button className="w-16 h-16 rounded-full neon-button shadow-2xl hover:scale-110 transition-all duration-300">
-            <Users className="w-6 h-6" />
-          </Button>
-        </Link>
-      </motion.div>
     </div>
   );
 }

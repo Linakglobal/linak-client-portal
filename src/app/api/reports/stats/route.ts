@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
 // Mock data for development when Supabase is not configured
@@ -11,7 +11,7 @@ const mockStats = {
   averageRewardPerReport: 25000,
 };
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     // Check if environment variables are properly configured
     if (

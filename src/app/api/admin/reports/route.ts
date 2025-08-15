@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
 // Mock data for development when Supabase is not configured
@@ -63,13 +63,13 @@ export async function GET() {
       process.env.SUPABASE_SERVICE_ROLE_KEY,
       {
         cookies: {
-          get() {
+          get(name: string) {
             return undefined;
           },
-          set() {
+          set(name: string, value: string, options: any) {
             // No-op for service role
           },
-          remove() {
+          remove(name: string, options: any) {
             // No-op for service role
           },
         },

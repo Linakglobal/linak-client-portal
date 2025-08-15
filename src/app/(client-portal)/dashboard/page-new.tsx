@@ -134,7 +134,7 @@ export default function DashboardPage() {
                   Dashboard
                 </h1>
                 <p className="text-slate-400">
-                  Welcome back! Here&apos;s your migration progress overview.
+                  Welcome back! Here's your migration progress overview.
                 </p>
               </div>
               <div className="flex space-x-3">

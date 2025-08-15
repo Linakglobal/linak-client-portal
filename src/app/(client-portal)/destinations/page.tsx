@@ -23,8 +23,7 @@ import {
   Phone,
   Calendar,
 } from "lucide-react";
-import MolecularNetworkVisualization from "@/components/3d/MolecularNetworkVisualization";
-import Advanced3DBackground from "@/components/3d/Advanced3DBackground";
+import ParticlesBackground from "@/components/ParticlesBackground";
 
 // Country data with success programs
 const countries = [
@@ -473,7 +472,7 @@ export default function DestinationsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#2b0e4a] via-[#4b2a82] to-[#0e1e4a] relative overflow-hidden">
       {/* Advanced 3D Background */}
-      <Advanced3DBackground />
+      <ParticlesBackground />
 
       {/* Header Section */}
       {/* Coming Soon - Premium Destinations */}
@@ -760,32 +759,13 @@ export default function DestinationsPage() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1.2, duration: 1 }}
           >
-            <MolecularNetworkVisualization
-              onCountrySelect={(countryId) => {
-                // Scroll to country card
-                const countryElement = document.getElementById(
-                  `country-${countryId}`
-                );
-                if (countryElement) {
-                  countryElement.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center",
-                  });
-                  // Temporarily highlight the card
-                  countryElement.classList.add("ring-4", "ring-yellow-400/50");
-                  setTimeout(() => {
-                    countryElement.classList.remove(
-                      "ring-4",
-                      "ring-yellow-400/50"
-                    );
-                  }, 2000);
-                }
-              }}
-              selectedCountry={
-                selectedFilter === "all" ? undefined : selectedFilter
-              }
-              className="h-[600px] mx-auto"
-            />
+            <div className="h-[600px] mx-auto bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm rounded-2xl border border-white/10 flex items-center justify-center">
+              <div className="text-center text-gray-400">
+                <Globe className="w-16 h-16 mx-auto mb-4 opacity-50" />
+                <p className="text-lg">Interactive Network Visualization</p>
+                <p className="text-sm">Coming Soon</p>
+              </div>
+            </div>
           </motion.div>
 
           {/* Network Stats */}
@@ -972,7 +952,7 @@ export default function DestinationsPage() {
                       {/* Testimonial */}
                       <div className="bg-white/5 p-3 rounded-lg">
                         <p className="text-white/90 text-sm italic mb-2">
-                          &ldquo;{country.testimonial}&rdquo;
+                          "{country.testimonial}"
                         </p>
                         <p className="text-slate-400 text-xs">
                           - {country.clientName}
