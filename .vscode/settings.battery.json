@@ -1,0 +1,43 @@
+{
+  // Battery-optimized settings for M4 Pro when working on battery
+  // Switch to these settings when mobile
+
+  // Reduce visual effects
+  "editor.minimap.enabled": false,
+  "editor.renderWhitespace": "none",
+  "editor.smoothScrolling": false,
+  "workbench.list.smoothScrolling": false,
+
+  // Optimize auto-save
+  "files.autoSave": "onFocusChange",
+  "files.autoSaveDelay": 1000,
+
+  // Reduce background processes
+  "git.autofetch": false,
+  "extensions.autoUpdate": false,
+  "update.mode": "none",
+
+  // Reduce IntelliSense aggressiveness
+  "editor.suggest.showWords": false,
+  "typescript.suggest.autoImports": false,
+
+  // Disable heavy features
+  "github.copilot.advanced": {
+    "listCount": 3,
+    "inlineSuggestCount": 2
+  },
+
+  // Terminal optimizations
+  "terminal.integrated.gpuAcceleration": "off",
+
+  // Reduce file watching
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/node_modules/**": true,
+    "**/.next/**": true,
+    "**/dist/**": true,
+    "**/build/**": true,
+    "**/coverage/**": true,
+    "**/.nyc_output/**": true
+  }
+}

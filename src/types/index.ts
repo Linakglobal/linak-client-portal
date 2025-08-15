@@ -1,105 +1,78 @@
+export interface Client {
+  id: string;
+  user_id: string;
+  email: string;
+  name: string;
+  dob: string;
+  company?: string;
+  phone?: string;
+  address?: string;
+  account_status?: "active" | "inactive" | "suspended";
+  payment_amount?: number;
+  currency?: string;
+  payment_status?: "completed" | "pending" | "overdue";
+  contract_type?: string;
+  start_date?: string;
+  end_date?: string;
+  created_at: string;
+  updated_at?: string;
+}
+
 export interface User {
   id: string;
   email: string;
-  name: string;
-  company?: string;
-  role: 'admin' | 'user' | 'manager';
-  accountType: 'basic' | 'premium' | 'enterprise';
-  createdAt: Date;
-  lastLogin?: Date;
+  name?: string;
+  created_at?: string;
 }
 
-export interface Order {
+export interface Document {
   id: string;
-  userId: string;
-  orderNumber: string;
-  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
-  items: OrderItem[];
-  totalAmount: number;
-  currency: string;
-  orderDate: Date;
-  estimatedDelivery?: Date;
-  shippingAddress: Address;
-  billingAddress: Address;
-}
-
-export interface OrderItem {
-  id: string;
-  productId: string;
-  productName: string;
-  productSku: string;
-  quantity: number;
-  unitPrice: number;
-  totalPrice: number;
-}
-
-export interface Product {
-  id: string;
-  sku: string;
-  name: string;
+  client_id: string;
+  file_name: string;
   description: string;
-  category: ProductCategory;
-  specifications: ProductSpecification[];
-  images: string[];
-  price: number;
-  currency: string;
-  availability: 'in-stock' | 'out-of-stock' | 'discontinued';
-  dataSheet?: string;
-  manualUrl?: string;
-}
-
-export interface ProductCategory {
-  id: string;
-  name: string;
-  description: string;
-  parentId?: string;
-}
-
-export interface ProductSpecification {
-  name: string;
-  value: string;
-  unit?: string;
-}
-
-export interface Address {
-  street: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  country: string;
-  company?: string;
-}
-
-export interface SupportTicket {
-  id: string;
-  userId: string;
-  subject: string;
-  description: string;
-  status: 'open' | 'in-progress' | 'resolved' | 'closed';
-  priority: 'low' | 'medium' | 'high' | 'urgent';
-  category: 'technical' | 'billing' | 'general' | 'order';
-  createdAt: Date;
-  updatedAt: Date;
-  assignedTo?: string;
-  attachments?: string[];
-}
-
-export interface ApiResponse<T> {
-  success: boolean;
-  data?: T;
-  error?: string;
-  message?: string;
+  status: "pending" | "processing" | "completed" | "rejected" | "approved";
+  file_path: string;
+  file_size?: number;
+  mime_type?: string;
+  uploaded_at: string;
+  updated_at?: string;
 }
 
 export interface AuthState {
-  isAuthenticated: boolean;
   user: User | null;
+  client: Client | null;
+  isAuthenticated: boolean;
   token: string | null;
+  loading: boolean;
+  error: string | null;
 }
 
-export interface DashboardStats {
-  activeOrders: number;
-  totalProducts: number;
-  supportTickets: number;
-  accountStatus: string;
+export interface ClientStore {
+  client: Client | null;
+  documents: Document[];
+  loading: boolean;
+  error: string | null;
+  setClient: (client: Client | null) => void;
+  setDocuments: (documents: Document[]) => void;
+  addDocument: (document: Document) => void;
+  updateDocument: (id: string, updates: Partial<Document>) => void;
+  setLoading: (loading: boolean) => void;
+  setError: (error: string | null) => void;
+  reset: () => void;
+}
+
+export interface LoginFormData {
+  email: string;
+  dob: string;
+}
+
+export interface UploadFormData {
+  file: File;
+  description: string;
+}
+
+export interface ProfileFormData {
+  name: string;
+  email: string;
+  dob: string;
 }

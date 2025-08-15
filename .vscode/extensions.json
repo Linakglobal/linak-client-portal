@@ -1,0 +1,54 @@
+{
+  "recommendations": [
+    // Essential for Next.js + TypeScript development
+    "ms-vscode.vscode-typescript-next",
+    "bradlc.vscode-tailwindcss",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+
+    // GitHub Copilot (AI assistance)
+    "github.copilot",
+    "github.copilot-chat",
+
+    // Performance monitoring for M4 Pro
+    "usernamehw.errorlens",
+    "ms-vscode.hexeditor",
+
+    // Supabase development
+    "supabase.supabase",
+
+    // React/Next.js specific
+    "ms-vscode.vscode-json",
+    "christian-kohler.npm-intellisense",
+    "christian-kohler.path-intellisense",
+
+    // Enhanced editing experience
+    "formulahendry.auto-rename-tag",
+    "ms-vscode.vscode-eslint",
+    "bradlc.vscode-tailwindcss",
+
+    // Git integration
+    "eamodio.gitlens",
+
+    // Apple Silicon / ARM64 optimized extensions
+    "ms-vscode.cpptools",
+
+    // Development utilities
+    "humao.rest-client",
+    "rangav.vscode-thunder-client",
+
+    // Markdown support (for documentation)
+    "yzhang.markdown-all-in-one",
+
+    // Package management
+    "christian-kohler.npm-intellisense",
+
+    // Environment file support
+    "mikestead.dotenv"
+  ],
+  "unwantedRecommendations": [
+    // Avoid Intel-specific or heavy extensions that might not be optimized for M4
+    "ms-python.python",
+    "ms-vscode.powershell"
+  ]
+}
