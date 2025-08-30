@@ -48,11 +48,16 @@ export default function Home() {
                 View Dashboard
               </Button>
             </Link>
+            <Link href="/vhsy-coin">
+              <Button variant="outline" size="lg" className="px-8 bg-gradient-to-r from-purple-600 to-blue-600 text-white border-0 hover:from-purple-700 hover:to-blue-700">
+                🪙 VHSY Ecosystem
+              </Button>
+            </Link>
           </div>
         </div>
 
         {/* Feature Cards */}
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
+        <div className="grid md:grid-cols-4 gap-8 mb-16">
           <Card className="hover:shadow-lg transition-shadow">
             <CardHeader>
               <CardTitle className="text-blue-600">Product Catalog</CardTitle>
@@ -95,6 +100,28 @@ export default function Home() {
                 Get expert assistance, download technical specifications, 
                 and access our comprehensive knowledge base.
               </p>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-lg transition-shadow border-purple-200 bg-gradient-to-br from-purple-50 to-blue-50">
+            <CardHeader>
+              <CardTitle className="text-purple-600 flex items-center">
+                🪙 VHSY Coin
+              </CardTitle>
+              <CardDescription>
+                Multi-utility cryptocurrency ecosystem
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600">
+                Experience the future of payments with VHSY - supporting immigration, 
+                real estate, daily use, charity, and education.
+              </p>
+              <Link href="/vhsy-coin">
+                <Button className="w-full mt-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700">
+                  Explore VHSY
+                </Button>
+              </Link>
             </CardContent>
           </Card>
         </div>
