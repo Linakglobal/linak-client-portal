@@ -48,7 +48,37 @@ export default function Home() {
                 View Dashboard
               </Button>
             </Link>
+            <Link href="/vanhsya-preview">
+              <Button variant="outline" size="lg" className="px-8 bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700 border-none">
+                🌟 VANHSYA Preview
+              </Button>
+            </Link>
           </div>
+        </div>
+
+        {/* VANHSYA Preview Banner */}
+        <div className="mb-16">
+          <Card className="bg-gradient-to-r from-purple-900 via-blue-900 to-indigo-900 text-white border-none hover:shadow-2xl transition-all duration-300">
+            <CardHeader className="text-center">
+              <CardTitle className="text-3xl font-bold mb-2">
+                🌟 VANHSYA Website Preview
+              </CardTitle>
+              <CardDescription className="text-purple-200 text-lg">
+                Experience the future of immigration with our revolutionary AI-powered platform
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="text-center">
+              <p className="text-purple-100 mb-6 max-w-2xl mx-auto">
+                Explore our comprehensive mockup featuring VHSY Coin, 100+ AI tools, global office network, 
+                and cutting-edge Quantum Glass Morphism design across 195 countries.
+              </p>
+              <Link href="/vanhsya-preview">
+                <Button size="lg" className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white px-12 py-3 text-lg rounded-xl font-semibold">
+                  View VANHSYA Preview →
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Feature Cards */}
